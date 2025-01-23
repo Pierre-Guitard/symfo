@@ -16,16 +16,53 @@
 
     <div id="total"></div>
 
-    {{ form_start(form) }}
-        <div class="col-6">
-            {{ form_row(form.date_debut) }}
-            {{ form_row(form.date_fin) }}
-            <input type="text" readonly id="prixReservation" name="prixReservation">
-        </div>
+    
+    {% if vehicule.statut == true %}
+        {{ form_start(form) }}
+            <div class="col-6">
+                {{ form_row(form.date_debut) }}
+                {{ form_row(form.date_fin) }}
+                <input type="text" readonly id="prixReservation" name="prixReservation">
+            </div>
 
-    <button type="submit" class="btn btn-success">Réserver</button>
+        <button type="submit" class="btn btn-success">Réserver</button>
 
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    {% else %}
+        <p>Ce véhicule n'est plus disponible à la location</p>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Commentaires</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        {% for commentaire in commentaires %}
+            <tr>
+                <td>{{commentaire.content }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Ajouter un commentaire</h2>
+
+    { {% if hasReservation %}}
+        {{ form_start(formComment) }}
+            {{ form_widget(formComment) }}
+            <button type="submit" class="btn btn-success">Poster</button>
+        {{ form_end(formComment) }}
+    {% else %}
+        <p class="text-muted">Vous devez avoir une réservation pour ce véhicule avant de pouvoir poster un commentaire.</p>
+    {% endif %} 
+    
 
    <script>
         let debut = document.getElementById("reservation_date_debut");

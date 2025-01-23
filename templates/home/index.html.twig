@@ -14,7 +14,15 @@
                 <p class="card-text">
                     <strong> Prix Journalier : {{ vehicule.prix }}€</strong>
                 </p>
+                <p class="card-text">
+                    <strong> Disponibilité : {{ vehicule.statut ? '✅' : '❌' }}</strong>
+                </p>
+                {% if vehicule.statut == true %}
                 <a href="{{ path('app_client_vehicule', {'id': vehicule.id}) }}" class="btn btn-primary">Réserver</a>
+                {% else %}
+                <a href="{{ path('app_client_vehicule', {'id': vehicule.id}) }}" class="btn btn-primary">Voir les avis</a>
+                {% endif %}
+                
                 </div>
             </div>
         {% endfor %}    

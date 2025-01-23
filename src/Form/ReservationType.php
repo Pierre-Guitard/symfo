@@ -9,6 +9,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class ReservationType extends AbstractType
 {
@@ -20,6 +21,11 @@ class ReservationType extends AbstractType
             ])
             ->add('date_fin', null, [
                 'widget' => 'single_text',
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'propertyPath' => 'date_debut'
+                    ]),
+                ]
             ])
             ->add('prix')
             ->add('vehicule', EntityType::class, [
