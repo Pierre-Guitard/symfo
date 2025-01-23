@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -17,6 +18,7 @@ class Reservation
     private ?\DateTimeImmutable $date_debut = null;
 
     #[ORM\Column]
+    #[GreaterThan(propertyPath: 'date_debut')]
     private ?\DateTimeImmutable $date_fin = null;
 
     #[ORM\Column]

@@ -54,7 +54,7 @@
 
     <h2>Ajouter un commentaire</h2>
 
-    { {% if hasReservation %}}
+    {% if hasReservation %}
         {{ form_start(formComment) }}
             {{ form_widget(formComment) }}
             <button type="submit" class="btn btn-success">Poster</button>
@@ -78,7 +78,6 @@
                 j = nbJour(debut.value, fin.value)
                 prix = document.getElementById("prix").innerText
                 total = document.getElementById("total")
-               // total.classList.toggle("alert arlet-info")
                 total.innerHTML = '<div class="alert alert-primary"> Pour ' + j +" ça fait: " + (prix * j) +  ' €</div>'
 
                 document.getElementById("prixReservation").value = (prix * j) 

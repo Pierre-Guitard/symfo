@@ -31,7 +31,6 @@ final class CompteController extends AbstractController
             'vehicule' => $vehicule
         ]);
 
-        dump($hasReservation);
         $form = $this->createForm(ReservationType::class, $reserver);
         $formComment = $this->createForm(CommentaireType::class, $comment);
 
@@ -46,15 +45,16 @@ final class CompteController extends AbstractController
             $reserver->setClient($this->getUser());
             $reserver->setVehicule($vehicule);
             $vehicule->setStatut(false);
-
             $manager->persist($reserver);
             $manager->flush();
         }
 
+        $formComment->handleRequest($request);
+
         if( $formComment->isSubmitted() ){
-            // $comment->setPrix( $request->get('prixReservation') );
             $comment->setClient($user);
             $comment->setVehicule($vehicule);
+            $comment->setDateComment(new \DateTimeImmutable('now'));
 
             $manager->persist($comment);
             $manager->flush();

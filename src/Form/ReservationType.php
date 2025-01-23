@@ -5,10 +5,13 @@ namespace App\Form;
 use App\Entity\Reservation;
 use App\Entity\User;
 use App\Entity\Vehicule;
+// use Monolog\DateTimeImmutable;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class ReservationType extends AbstractType
@@ -19,14 +22,8 @@ class ReservationType extends AbstractType
             ->add('date_debut', null, [
                 'widget' => 'single_text',
             ])
-            ->add('date_fin', null, [
-                'widget' => 'single_text',
-                'constraints' => [
-                    new GreaterThanOrEqual([
-                        'propertyPath' => 'date_debut'
-                    ]),
-                ]
-            ])
+            ->add('date_fin'
+            )
             ->add('prix')
             ->add('vehicule', EntityType::class, [
                 'class' => Vehicule::class,
