@@ -22,10 +22,13 @@ class Commentaire
     #[ORM\Column]
     private ?\DateTimeImmutable $date_comment = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Vehicule $vehicule = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+
     private ?User $client = null;
 
     public function getId(): ?int

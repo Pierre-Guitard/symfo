@@ -20,7 +20,7 @@ final class CompteController extends AbstractController
     
 
     #[Route('/vehicule/{id}', name: 'app_client_vehicule')]
-    public function client(Vehicule $vehicule, Request $request,Commentaire $commentaire, EntityManagerInterface $manager): Response
+    public function client(Vehicule $vehicule, Request $request, EntityManagerInterface $manager): Response
     {
         $reserver = new Reservation;
         $comment = new Commentaire;
@@ -28,6 +28,9 @@ final class CompteController extends AbstractController
         $user = $this->getUser();
         $hasReservation = $manager->getRepository(Reservation::class)->findOneBy([
             'client' => $user,
+            'vehicule' => $vehicule
+        ]);
+        $totalReservations = $manager->getRepository(Reservation::class)->count([
             'vehicule' => $vehicule
         ]);
 
@@ -66,7 +69,8 @@ final class CompteController extends AbstractController
             "form" => $form,
             "commentaires" => $vehicule->getCommentaires(),
             "formComment" => $formComment,
-            "hasReservation" => $hasReservation
+            "hasReservation" => $hasReservation,
+            "totalReservations" => $totalReservations
         ]);
     }
 }

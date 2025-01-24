@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Reservation;
 use App\Entity\Vehicule;
 use App\Form\VehiculeType;
 use App\Repository\VehiculeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Monolog\DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,8 +54,13 @@ final class VehiculeController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_vehicule_show', methods: ['GET'])]
-    public function show(Vehicule $vehicule): Response
+    public function show(Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
+        $hasReservation = $entityManager->getRepository(Reservation::class)->findOneBy([
+            // 'client' => $user,
+            'vehicule' => $vehicule
+        ]);
+        dump($hasReservation);
         return $this->render('vehicule/show.html.twig', [
             'vehicule' => $vehicule,
         ]);
@@ -64,12 +71,20 @@ final class VehiculeController extends AbstractController
     {
         $form = $this->createForm(VehiculeType::class, $vehicule);
         $form->handleRequest($request);
+        $endReservation = $entityManager->getRepository(Reservation::class)->findOneBy([
+            'vehicule' => $vehicule
+        ]);
+        $endReservation->getDateFin();
+        $dateToday = new \DateTimeImmutable();
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_vehicule_index', [], Response::HTTP_SEE_OTHER);
+            // return $this->redirectToRoute('app_vehicule_index', ["date_fin"=>$endReservation, "dateToday"=>$dateToday ], Response::HTTP_SEE_OTHER);
         }
+        dump( $endReservation, $dateToday);
 
         return $this->render('vehicule/edit.html.twig', [
             'vehicule' => $vehicule,
@@ -80,6 +95,11 @@ final class VehiculeController extends AbstractController
     #[Route('/{id}', name: 'app_vehicule_delete', methods: ['POST'])]
     public function delete(Request $request, Vehicule $vehicule, EntityManagerInterface $entityManager): Response
     {
+        $hasReservation = $entityManager->getRepository(Reservation::class)->findOneBy([
+            // 'client' => $user,
+            'vehicule' => $vehicule
+        ]);
+        dump( $hasReservation);
         if ($this->isCsrfTokenValid('delete'.$vehicule->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($vehicule);
             $entityManager->flush();

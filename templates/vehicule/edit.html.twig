@@ -9,5 +9,11 @@
 
     <a href="{{ path('app_vehicule_index') }}">back to list</a>
 
-    {{ include('vehicule/_delete_form.html.twig') }}
+    {# {% if dateToday < endReservation %}
+        <p>Le véhicule ne peut pas encore etre supprimé car une reservation est encore prévu et fini le {{ endReservation}}</p>
+    {% else %} #}
+        {{ include('vehicule/_delete_form.html.twig') }}
+    {# {% endif %} #}
+    
+    
 {% endblock %}

@@ -15,6 +15,7 @@
     <hr>
 
     <div id="total"></div>
+    <p>ce véhicule à été reservé {{ totalReservations }} fois </p>
 
     
     {% if vehicule.statut == true %}
@@ -32,7 +33,7 @@
         <p>Ce véhicule n'est plus disponible à la location</p>
     {% endif %}
 
-    <table class="table">
+     <table class="table">
         <thead>
             <tr>
                 <th>Commentaires</th>
@@ -40,7 +41,21 @@
             </tr>
         </thead>
         <tbody>
-        {% for commentaire in commentaires %}
+        {% if commentaires %}
+
+            {% for commentaire in commentaires %}
+            <tr>
+                <td>{{commentaire.content }}</td>
+            </tr>
+             {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+           
+        {% endif %} 
+        
+        {# {% for commentaire in commentaires %}
             <tr>
                 <td>{{commentaire.content }}</td>
             </tr>
@@ -48,7 +63,7 @@
             <tr>
                 <td colspan="5">no records found</td>
             </tr>
-        {% endfor %}
+        {% endfor %} #}
         </tbody>
     </table>
 
@@ -78,9 +93,16 @@
                 j = nbJour(debut.value, fin.value)
                 prix = document.getElementById("prix").innerText
                 total = document.getElementById("total")
-                total.innerHTML = '<div class="alert alert-primary"> Pour ' + j +" ça fait: " + (prix * j) +  ' €</div>'
-
-                document.getElementById("prixReservation").value = (prix * j) 
+                ammount = prix * j
+               if (ammount < 400) {
+                reduction = (ammount * 10)/100
+                ammount -= reduction
+                total.innerHTML = '<div class="alert alert-primary"> Pour ' + j +" ça fait: " + ammount +  ' €, vous beneficier d une reduction car le prix est inferieur à 400 euros</div>'
+                document.getElementById("prixReservation").value = ammount
+               }else{
+                total.innerHTML = '<div class="alert alert-primary"> Pour ' + j +" ça fait: " + ammount +  ' €. Le prix dépassant 400 euros, pas de reduction appliqué.</div>'
+                document.getElementById("prixReservation").value = ammount
+               }
 
             })
         })

@@ -6,6 +6,7 @@ use App\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Range;
 
 #[ORM\Entity(repositoryClass: VehiculeRepository::class)]
 class Vehicule
@@ -28,6 +29,11 @@ class Vehicule
     private ?string $type = null;
 
     #[ORM\Column]
+    #[Range(
+        min: 20,
+        max: 50,
+        notInRangeMessage: 'The price must been between {{ min }}€ and {{ max }}€',
+    )]
     private ?float $prix = null;
 
     #[ORM\Column]
@@ -36,13 +42,13 @@ class Vehicule
     /**
      * @var Collection<int, Reservation>
      */
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'vehicule')]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'vehicule', cascade: ['remove'], orphanRemoval: true)]
     private Collection $reservations;
 
     /**
      * @var Collection<int, Commentaire>
      */
-    #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'vehicule')]
+    #[ORM\OneToMany(mappedBy: "vehicule", targetEntity: Commentaire::class, cascade: ["remove"])]
     private Collection $commentaires;
 
     #[ORM\Column(length: 255, nullable: true)]
